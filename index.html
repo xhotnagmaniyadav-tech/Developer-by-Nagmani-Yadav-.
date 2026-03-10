@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Nagmani AI Portfolio</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+body{
+
+background:linear-gradient(270deg,#ff0080,#7928ca,#2af598,#009efd);
+background-size:600% 600%;
+animation:bgmove 10s infinite;
+color:white;
+
+}
+
+@keyframes bgmove{
+
+0%{background-position:0% 50%}
+50%{background-position:100% 50%}
+100%{background-position:0% 50%}
+
+}
+
+.container{
+
+width:900px;
+margin:auto;
+margin-top:40px;
+background:rgba(0,0,0,0.6);
+backdrop-filter:blur(10px);
+padding:40px;
+border-radius:20px;
+text-align:center;
+box-shadow:0 0 40px black;
+
+}
+
+.typing{
+font-size:28px;
+font-weight:bold;
+margin-bottom:20px;
+animation:textcolor 6s infinite;
+}
+
+.profile img{
+width:180px;
+height:180px;
+border-radius:50%;
+object-fit:cover;
+border:6px solid cyan;
+animation:bordercolor 6s infinite;
+}
+
+@keyframes bordercolor{
+0%{border-color:#00ffff}
+25%{border-color:#ff00ff}
+50%{border-color:#00ff00}
+75%{border-color:#ffaa00}
+100%{border-color:#00ffff}
+}
+
+@keyframes textcolor{
+0%{color:#00ffff}
+25%{color:#ff00ff}
+50%{color:#00ff88}
+75%{color:#ffaa00}
+100%{color:#00ffff}
+}
+
+h2,p{
+animation:textcolor 6s infinite;
+}
+
+button{
+
+margin:10px;
+padding:12px 25px;
+border:none;
+border-radius:30px;
+background:#00ffff;
+color:black;
+font-weight:bold;
+cursor:pointer;
+}
+
+.section{
+margin-top:25px;
+}
+
+input,textarea{
+width:90%;
+padding:10px;
+margin:8px;
+border-radius:10px;
+border:none;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- PAGE 1 PORTFOLIO -->
+
+<div class="container" id="resume">
+
+<div class="typing" id="typing"></div>
+
+<div class="profile">
+<img id="photo" src="nagmani.jpg">
+</div>
+
+<button onclick="changePhoto()">Change Photo</button>
+
+<h2>Nagmani Yadav</h2>
+
+<p>Email: xhotnagmaniyadav@gmail.com</p>
+<p>Phone: 9204909834</p>
+<p>Location: Bihar, India</p>
+
+<div class="section">
+
+<h3>Career Objective</h3>
+
+<p>
+I want to work in a professional environment where I can use my
+computer skills and grow my career.
+</p>
+
+</div>
+
+<div class="section">
+
+<h3>Education</h3>
+
+<p>12th Pass</p>
+<p>ADCA+</p>
+
+</div>
+
+<div class="section">
+
+<h3>Computer Skills</h3>
+
+<p>HTML</p>
+<p>MS Word</p>
+<p>MS Excel</p>
+<p>Internet</p>
+
+</div>
+
+<button onclick="downloadResume()">Download My Resume</button>
+
+<p style="margin-top:20px;font-size:14px;">
+Developer by Nagmani-Yadav
+</p>
+
+</div>
+
+
+<!-- PAGE 2 RESUME FORM -->
+
+<div class="container">
+
+<h2>Submit Your Resume</h2>
+
+<form id="resumeForm">
+
+<input type="text" name="name" placeholder="Full Name" required>
+
+<input type="email" name="email" placeholder="Email">
+
+<input type="text" name="phone" placeholder="Phone Number">
+
+<input type="text" name="skills" placeholder="Skills">
+
+<textarea name="experience" placeholder="Experience"></textarea>
+
+<label>Upload Photo</label>
+<input type="file" name="photo">
+
+<label>Upload Resume</label>
+<input type="file" name="resume">
+
+<button type="submit">Send Resume</button>
+
+</form>
+
+<p id="msg"></p>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+<script>
+
+/* typing */
+
+let text="Hello I'm Nagmani";
+let i=0;
+
+function typing(){
+
+if(i<text.length){
+
+document.getElementById("typing").innerHTML+=text.charAt(i);
+
+i++;
+
+setTimeout(typing,100);
+
+}
+
+}
+
+typing();
+
+/* load saved photo */
+
+window.onload=function(){
+
+let saved=localStorage.getItem("profilePhoto");
+
+if(saved){
+
+document.getElementById("photo").src=saved;
+
+}
+
+}
+
+/* change photo */
+
+function changePhoto(){
+
+let pass=prompt("Enter Password");
+
+if(pass==="7585"){
+
+let input=document.createElement("input");
+
+input.type="file";
+
+input.onchange=function(e){
+
+let file=e.target.files[0];
+
+let reader=new FileReader();
+
+reader.onload=function(){
+
+let img=reader.result;
+
+document.getElementById("photo").src=img;
+
+localStorage.setItem("profilePhoto",img);
+
+}
+
+reader.readAsDataURL(file);
+
+}
+
+input.click();
+
+}
+
+else{
+
+alert("Wrong Password");
+
+}
+
+}
+
+/* download portfolio */
+
+function downloadResume(){
+
+html2canvas(document.querySelector("#resume")).then(canvas=>{
+
+let link=document.createElement("a");
+
+link.download="nagmani_portfolio.png";
+
+link.href=canvas.toDataURL();
+
+link.click();
+
+});
+
+}
+
+
+/* EMAILJS */
+
+(function(){
+emailjs.init("YOUR_PUBLIC_KEY");
+})();
+
+document.getElementById("resumeForm")
+.addEventListener("submit",function(e){
+
+e.preventDefault();
+
+emailjs.sendForm("YOUR_SERVICE_ID","YOUR_TEMPLATE_ID",this)
+.then(function(){
+
+document.getElementById("msg").innerHTML="Resume Sent Successfully";
+
+});
+
+});
+
+</script>
+
+</body>
+</html>
